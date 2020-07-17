@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch a Sketch</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <section id="button-section">
+        <button id="generate-button" onclick="createNewGrids()">New Grid</button>
+        <button id="black-color-button" onclick="blackColorTheGrid()">Black color</button>
+        <button id="random-color-button" onclick="randomizeColorTheGrid()">Random color</button>
+        <button id="clear-button" onclick="resetTheGrids()">Reset</button>
+    </section>
+
+    <div id="sketch-panel"></div>
+
+    <footer>
+        <p>Made by Tien Tai</p>
+    </footer>
+
+    <script>
+        function createGrid(nGrids) {
+            const square = document.createElement('div')
+            square.classList.add('square')
+            square.style.width = 500 / nGrids - 2 + 'px';
+            square.style.height = 500 / nGrids - 2 + 'px';
+            sketch_panel.appendChild(square)
+        }
+
+        function generateGrids(nGrids) {
+            for (let i = 0; i < nGrids * nGrids; i++) createGrid(nGrids)
+        }
+
+        function blackenTheGrid() {
+            this.style.backgroundColor = 'black'
+        }
+
+        function colorTheGrid() {
+            this.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16)
+        }
+
+        function randomizeColorTheGrid() {
+            grids.forEach(grid => grid.removeEventListener('mouseenter', blackenTheGrid))
+            grids.forEach(grid => grid.addEventListener('mouseenter', colorTheGrid))
+        }
+
+        function blackColorTheGrid() {
+            grids.forEach(grid => grid.removeEventListener('mouseenter', colorTheGrid))
+            grids.forEach(grid => grid.addEventListener('mouseenter', blackenTheGrid))
+        }
+
+        function resetTheGrids() {
+            grids.forEach(grid => grid.style.backgroundColor = 'inherit')
+        }
+
+        function createNewGrids() {
+            let number = prompt("How many grids each side you want to have", 16)
+            sketch_panel.innerHTML = ""
+            generateGrids(number)
+            grids = document.querySelectorAll('.square')
+            grids.forEach(grid => grid.addEventListener('mouseenter', blackenTheGrid))
+        }
+
+        const sketch_panel = document.querySelector('#sketch-panel')
+        generateGrids(16)
+        let grids = document.querySelectorAll('.square')
+        blackColorTheGrid()
+
+    </script>
+</body>
+
+</html>
