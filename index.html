@@ -11,8 +11,9 @@
 <body>
     <section id="button-section">
         <button id="generate-button" onclick="createNewGrids()">New Grid</button>
-        <button id="black-color-button" onclick="blackColorTheGrid()">Black color</button>
-        <button id="random-color-button" onclick="randomizeColorTheGrid()">Random color</button>
+        <button id="black-color-button" onclick="blackColorTheGrid()">Black mode</button>
+        <button id="additive-button" onclick="additiveMode()">Additive mode</button>
+        <button id="random-color-button" onclick="randomizeColorTheGrid()">Random mode</button>
         <button id="clear-button" onclick="resetTheGrids()">Reset</button>
     </section>
 
@@ -26,6 +27,7 @@
         function createGrid(nGrids) {
             const square = document.createElement('div')
             square.classList.add('square')
+            square.style.backgroundColor = 'rgb(255,255,255)'
             square.style.width = 500 / nGrids - 2 + 'px';
             square.style.height = 500 / nGrids - 2 + 'px';
             sketch_panel.appendChild(square)
@@ -43,18 +45,35 @@
             this.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16)
         }
 
+        function additiveTheGrid() {
+            const curColor = this.style.backgroundColor
+            const rgb = curColor.match(/\d+/g)
+            for (let i=0; i<3; i++) rgb[i] = Math.max(rgb[i] - 25, 0)
+            this.style.backgroundColor = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`
+        }
+
         function randomizeColorTheGrid() {
             grids.forEach(grid => grid.removeEventListener('mouseenter', blackenTheGrid))
+            grids.forEach(grid => grid.removeEventListener('mouseenter', additiveTheGrid))
             grids.forEach(grid => grid.addEventListener('mouseenter', colorTheGrid))
         }
 
         function blackColorTheGrid() {
             grids.forEach(grid => grid.removeEventListener('mouseenter', colorTheGrid))
+            grids.forEach(grid => grid.removeEventListener('mouseenter', additiveTheGrid))
             grids.forEach(grid => grid.addEventListener('mouseenter', blackenTheGrid))
         }
 
+        function additiveMode() {
+            grids.forEach(grid => grid.removeEventListener('mouseenter', blackenTheGrid))
+            grids.forEach(grid => grid.removeEventListener('mouseenter', colorTheGrid))
+            grids.forEach(grid => grid.addEventListener('mouseenter', additiveTheGrid))
+        }
+
+
+
         function resetTheGrids() {
-            grids.forEach(grid => grid.style.backgroundColor = 'inherit')
+            grids.forEach(grid => grid.style.backgroundColor = `rgb(255,255,255)`)
         }
 
         function createNewGrids() {
